@@ -1,86 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<style>
-    #title-text{
-        color: royalblue;
-    }
-</style>
-<body>
-    <div id='root'>
-     
-    </div>
-    
-    <script type="text/babel">
-        const rootElement = document.getElementById("root");
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script
+			crossorigin
+			src="https://unpkg.com/react@17/umd/react.development.js"
+		></script>
+		<script
+			crossorigin
+			src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+		></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	</head>
+	<style>
+		#title-text {
+			color: royalblue;
+		}
+	</style>
+	<body>
+		<div id="root"></div>
 
-        const Counter = ({ count, incrementFn, decrementFn, removeFn }) => (
-            <div>
-                <h1>Current Count = {count}</h1>
-                <button onClick={incrementFn}>Increment</button>
-                <button onClick={decrementFn}>Decrement</button>
-                <button onClick={removeFn}>Remove</button>
-            </div>
-        )
+		<script type="text/babel">
+			const rootElement = document.getElementById("root");
 
-        const CounterApp = () => {
-            const [counts, setCounts] = React.useState([7])
+			const Counter = ({ count, incrementFn, decrementFn, removeFn }) => (
+				<div>
+					<h1>Current Count : {count}</h1>
+					<button onClick={incrementFn}>Increment</button>
+					<button onClick={decrementFn}>Decrement</button>
+					<button onClick={removeFn}>Remove</button>
+				</div>
+			);
 
-            const removeFn = (index) => {
-                setCounts(
-                    counts.filter(
-                        (val, idx) => idx !== index 
-                    )
-                )
-            }
+			const CounterApp = () => {
+				const [counts, setCounts] = React.useState([7]);
 
-            const incrementFn = (index) => {
-                setCounts(
-                    counts.map(
-                        (val, idx) => idx === index ? val + 1: val
-                    )
-                )
-            }
+				const removeFn = (index) => {
+					setCounts(counts.filter((val, idx) => idx !== index));
+				};
 
-            const decrementFn = (index) => {
-                setCounts(
-                    counts.map(
-                        (val, idx) => idx === index ? val - 1: val
-                    )
-                )
-            }
+				const incrementFn = (index) => {
+					setCounts(counts.map((val, idx) => (idx === index ? val + 1 : val)));
+				};
 
-            const addCounter = () => {
-                setCounts(counts.concat([0]))
-            }
+				const decrementFn = (index) => {
+					setCounts(counts.map((val, idx) => (idx === index ? val - 1 : val)));
+				};
 
-            return (
-                <div className="container">
-                    {
-                        counts.map(
-                            (count, index) => <Counter 
-                                                count={count} 
-                                                incrementFn={() => incrementFn(index)}
-                                                decrementFn={() => decrementFn(index)}
-                                                removeFn={() => removeFn(index)}
-                                            />
-                            )
-                    }
-                    
-                    <button onClick={addCounter}>Add Another Counter</button>
-                </div>
-            )
-        }
+				const addCounter = () => {
+					setCounts(counts.concat([0]));
+				};
 
-        ReactDOM.render(<CounterApp />, rootElement)
+				return (
+					<div className='container'>
+						{counts.map((count, index) => (
+							<Counter
+								key={index}
+								count={count}
+								incrementFn={() => incrementFn(index)}
+								decrementFn={() => decrementFn(index)}
+								removeFn={() => removeFn(index)}
+							/>
+						))}
 
-    </script>
-</body>
+						<button onClick={addCounter}>Add Another Counter</button>
+					</div>
+				);
+			};
+
+			const TodoApp = () => {
+				const [todos, setTodos] = React.useState(["init Todo"]);
+
+				const [text, setText] = React.useState("");
+
+				const addTodo = () => {
+					setTodos(todos.concat(text));
+					setText("");
+				};
+
+				const handleChange = (event) => {
+					setText(event.target.value);
+				};
+
+				return (
+					<div>
+						<input type='text' value={text} onChange={handleChange} />
+
+						<button onClick={addTodo}>Add New Todo</button>
+
+						{todos.map((text, index) => {
+							return (
+								<div key={index}>
+									<h1>{text}</h1>
+								</div>
+							);
+						})}
+					</div>
+				);
+			};
+
+			const App = () => {
+				const [view, setView] = React.useState("TODO");
+
+				return (
+					<div>
+						<button
+							onClick={() => {
+								setView(view === "TODO" ? "COUNTER" : "TODO");
+							}}>
+							Change App
+						</button>
+
+						{view === "TODO" ? <TodoApp /> : <CounterApp />}
+					</div>
+				);
+			};
+
+			ReactDOM.render(<App />, rootElement);
+		</script>
+	</body>
 </html>
